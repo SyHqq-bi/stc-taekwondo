@@ -44,7 +44,7 @@ export default function Schedule() {
         )}
 
         {/* Header Section */}
-        <div className="bg-gradient-to-br from-red-50/50 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-8 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-100/80 px-3.5 py-1 rounded-full border border-red-200">
               <Flame size={12} className="text-red-600" /> AGENDA LATIHAN RUTIN
@@ -57,7 +57,7 @@ export default function Schedule() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 bg-white border-2 border-red-100 px-5 py-3.5 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2.5 bg-white border-2 border-red-100 px-5 py-3.5 rounded-2xl shadow-xs">
             <Sparkles size={22} className="text-amber-500" />
             <div>
               <div className="text-xs font-black uppercase tracking-wider text-slate-900">{schedules.length} Sesi / Minggu</div>
@@ -66,7 +66,7 @@ export default function Schedule() {
           </div>
         </div>
 
-        {/* Grid Kartu Jadwal Asli Database */}
+        {/* Grid Kartu Jadwal */}
         {loading ? (
           <div className="py-12 text-center text-xs font-bold text-slate-400">Memuat agenda latihan...</div>
         ) : schedules.length === 0 ? (
@@ -78,11 +78,11 @@ export default function Schedule() {
             {schedules.map((item) => (
               <div
                 key={item.id}
-                className="bg-gradient-to-b from-red-50/30 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                className="bg-white border border-slate-200/80 hover:border-red-500/30 rounded-3xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-4">
-                    <span className="px-4 py-1.5 bg-red-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md shadow-red-500/20">
+                    <span className="px-4 py-1.5 bg-red-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm">
                       HARI {item.day}
                     </span>
                     <span className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-red-50 px-3 py-1 rounded-xl border border-red-100">
