@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
-import { Flame, Trophy, ShieldCheck, Award, ArrowRight, ChevronRight, User, CheckCircle2, Zap, Sparkles, Navigation } from 'lucide-react';
+import { Flame, Trophy, ShieldCheck, Award, ArrowRight, ChevronRight, User, CheckCircle2, Sparkles, Navigation } from 'lucide-react';
 
 export default function Home() {
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(true);
   const [activeCategory, setActiveCategory] = useState('ALL');
 
-  // Hero Athlete Image (Clean Aesthetic Taekwondo Stance)
-  const heroAthleteImg = "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1000&q=80";
+  // Foto PNG Transparan Atlet Taekwondo (Cutout tanpa latar belakang kotak)
+  // Bisa kamu ganti dengan file lokal kamu, contoh: import athleteImg from '../assets/atlet.png'
+  const heroAthletePng = "https://pngimg.com/uploads/taekwondo/taekwondo_PNG18.png";
 
   useEffect(() => {
     fetchCoaches();
@@ -27,7 +28,6 @@ export default function Home() {
     setLoadingCoaches(false);
   };
 
-  // Hanya Kyorugi dan Poomsae
   const programs = [
     {
       id: 'kyorugi',
@@ -54,11 +54,11 @@ export default function Home() {
   return (
     <div className="min-h-screen pt-28 pb-20 px-4 sm:px-6 font-sans space-y-24 max-w-6xl mx-auto">
       
-      {/* 1. HERO SECTION (FLOATING CLEAN SHOWCASE ALA UNIQUE CAR RENTAL) */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        {/* Teks Kiri */}
+      {/* 1. HERO SECTION (CUTOUT PNG ATLET FLOATING ALA REFERENSI MOBIL UNIQUE) */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center min-h-[440px]">
+        {/* Teks Sisi Kiri */}
         <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <span className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-4 py-1.5 rounded-full border border-red-100/80 shadow-xs">
+          <span className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-4 py-1.5 rounded-full border border-red-100 shadow-xs">
             <Flame size={13} className="text-red-600 fill-red-600 animate-pulse" /> STAR TAEKWONDO CLUB
           </span>
 
@@ -87,24 +87,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Floating Showcase Kanan (Atlet Foto Clean + Floating Glass Badge) */}
-        <div className="lg:col-span-5 relative">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/80 border border-slate-200/80 shadow-xl group transition-all duration-700 hover:shadow-2xl hover:-translate-y-1">
-            <img
-              src={heroAthleteImg}
-              alt="STC Taekwondo Athlete"
-              className="w-full h-[360px] sm:h-[400px] object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            
-            {/* Soft Bottom Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+        {/* Floating PNG Showcase Kanan (Atlet Cutout Tanpa Background Box) */}
+        <div className="lg:col-span-5 relative flex items-center justify-center py-6">
+          {/* Ambient Glow Merah-Emas Halus di Belakang Atlet PNG */}
+          <div className="absolute w-[300px] h-[300px] bg-gradient-to-tr from-red-500/15 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-            {/* Glassmorphism Badge Below */}
-            <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md border border-white/60 p-4 rounded-2xl shadow-lg flex items-center gap-3.5 transition-all duration-500 group-hover:bg-white">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 flex-shrink-0">
-                <Trophy size={20} />
+          <div className="relative z-10 group w-full flex flex-col items-center">
+            {/* Foto Atlet PNG Transparan Cutout Floating */}
+            <img
+              src={heroAthletePng}
+              alt="STC Taekwondo Athlete Cutout"
+              className="w-auto h-[320px] sm:h-[380px] object-contain drop-shadow-2xl transition-all duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-2"
+            />
+
+            {/* Badge Terapung Clean (Melayang Di Bawah Atlet) */}
+            <div className="mt-4 bg-white/90 backdrop-blur-md border border-slate-200/80 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3.5 transition-all duration-500 hover:shadow-2xl hover:border-red-200">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 flex-shrink-0">
+                <Trophy size={18} />
               </div>
-              <div>
+              <div className="text-left">
                 <div className="text-xs font-black text-slate-900 uppercase font-heading">Dojang Resmi Pengcab TI</div>
                 <div className="text-[10px] text-red-600 font-extrabold uppercase tracking-wider">Terverifikasi & Bersetifikat</div>
               </div>
@@ -126,7 +127,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. PROGRAM PEMBINAAN (MURNI KYORUGI & POOMSAE DENGAN TAB KAPSUL CLEAN) */}
+      {/* 2. PROGRAM PEMBINAAN (KYORUGI & POOMSAE) */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
@@ -140,7 +141,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Filter Pills Kapsul (Tanpa Reguler Pemula) */}
+        {/* Filter Pills Kapsul */}
         <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
           {[
             { id: 'ALL', label: 'Semua Program' },
@@ -199,7 +200,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. KEY ADVANTAGES (4 KARTU CLEAN MINIMALIS) */}
+      {/* 3. KEY ADVANTAGES */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
