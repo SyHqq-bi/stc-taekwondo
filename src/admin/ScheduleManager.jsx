@@ -15,7 +15,11 @@ export default function Schedule() {
 
   const fetchSchedules = async () => {
     setLoading(true);
-    const { data } = await supabase.from('schedules').select('*').order('created_at', { ascending: true });
+    const { data } = await supabase
+      .from('schedules')
+      .select('*')
+      .order('created_at', { ascending: true });
+
     setSchedules(data || []);
     setLoading(false);
   };
@@ -24,7 +28,7 @@ export default function Schedule() {
     <div className="min-h-screen pt-32 pb-20 px-6 font-sans">
       <div className="max-w-5xl mx-auto space-y-8">
         
-        {/* Banner Admin Shortcut */}
+        {/* Banner Pintas Admin */}
         {profile?.role === 'ADMIN' && (
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between gap-4">
             <div className="text-xs font-bold text-amber-900">
@@ -62,7 +66,7 @@ export default function Schedule() {
           </div>
         </div>
 
-        {/* Grid Kartu Jadwal */}
+        {/* Grid Kartu Jadwal Asli Database */}
         {loading ? (
           <div className="py-12 text-center text-xs font-bold text-slate-400">Memuat agenda latihan...</div>
         ) : schedules.length === 0 ? (
