@@ -35,11 +35,11 @@ export default function Achievements() {
   const getMedalBadge = (medal) => {
     switch (medal) {
       case 'GOLD':
-        return 'bg-amber-500 text-white border-amber-400 font-black shadow-md shadow-amber-500/20';
+        return 'bg-amber-100 text-amber-800 border-amber-300 font-black shadow-xs';
       case 'SILVER':
-        return 'bg-slate-800 text-white border-slate-700 font-black shadow-md';
+        return 'bg-slate-200 text-slate-800 border-slate-300 font-black shadow-xs';
       case 'BRONZE':
-        return 'bg-amber-800 text-amber-100 border-amber-700 font-black shadow-md';
+        return 'bg-amber-900/10 text-amber-900 border-amber-900/20 font-black shadow-xs';
       default:
         return 'bg-slate-100 text-slate-700 border-slate-200 font-bold';
     }
@@ -65,11 +65,12 @@ export default function Achievements() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3.5 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl border border-slate-800">
-            <Trophy className="text-amber-400" size={32} />
+          {/* Badge Widget Terang & Bersih */}
+          <div className="flex items-center gap-3.5 bg-amber-50/80 border border-amber-200/80 px-6 py-4 rounded-2xl shadow-sm">
+            <Trophy className="text-amber-600" size={32} />
             <div>
-              <div className="text-2xl font-black font-heading text-white">{achievements.length} Medali</div>
-              <div className="text-[10px] font-extrabold text-red-500 uppercase tracking-wider">Terverifikasi Admin</div>
+              <div className="text-2xl font-black font-heading text-slate-900">{achievements.length} Medali</div>
+              <div className="text-[10px] font-extrabold text-red-600 uppercase tracking-wider">Terverifikasi Admin</div>
             </div>
           </div>
         </div>
@@ -87,16 +88,16 @@ export default function Achievements() {
             />
           </div>
 
-          {/* Filter Pills Hitam + Aksen Merah Bold */}
-          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl shadow-xl w-full sm:w-auto overflow-x-auto">
+          {/* Filter Pills Wadah Putih Bersih + Tombol Aktif Merah Bold */}
+          <div className="flex items-center gap-1.5 bg-white border border-slate-200/80 p-1.5 rounded-2xl shadow-sm w-full sm:w-auto overflow-x-auto">
             {['ALL', 'GOLD', 'SILVER', 'BRONZE'].map((medal) => (
               <button
                 key={medal}
                 onClick={() => setFilterMedal(medal)}
                 className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 ${
                   filterMedal === medal
-                    ? 'bg-red-600 text-white border border-red-500 shadow-lg shadow-red-600/40 scale-105'
-                    : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white hover:border-red-600/60'
+                    ? 'bg-red-600 text-white shadow-md shadow-red-500/25 scale-105'
+                    : 'text-slate-600 hover:text-red-600 hover:bg-red-50'
                 }`}
               >
                 {medal === 'ALL' ? 'Semua' : medal}
@@ -121,7 +122,7 @@ export default function Achievements() {
               return (
                 <div
                   key={item.id}
-                  className="group bg-white border border-slate-200/80 hover:border-red-600/40 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-xl hover:shadow-red-600/5 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden"
+                  className="group bg-white border border-slate-200/80 hover:border-red-600/40 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden"
                 >
                   {/* Aksentuasi Garis Merah di Kiri Kartu saat Hover */}
                   <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -141,7 +142,7 @@ export default function Achievements() {
                     )}
 
                     <div>
-                      {/* Nama Atlet Extra Bold & Standout */}
+                      {/* Nama Atlet Extra Bold */}
                       <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase font-heading tracking-wide">
                         {studentName}
                       </h3>
