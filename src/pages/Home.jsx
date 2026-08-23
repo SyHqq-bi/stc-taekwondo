@@ -7,13 +7,15 @@ export default function Home() {
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(true);
 
+  // Gambar Background Hero Sementara (Bisa kamu ganti nanti dengan URL/foto dojang kamu sendiri)
+  const heroBgImage = "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1920&q=80";
+
   useEffect(() => {
     fetchCoaches();
   }, []);
 
   const fetchCoaches = async () => {
     setLoadingCoaches(true);
-    // Hanya ambil user yang telah kamu set sebagai 'COACH' dari dashboard Admin
     const { data } = await supabase
       .from('profiles')
       .select('id, full_name, avatar_url, role')
@@ -25,63 +27,76 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-6 font-sans space-y-16 max-w-6xl mx-auto">
+    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 font-sans space-y-16 max-w-6xl mx-auto">
       
-      {/* 1. HERO SECTION */}
-      <section className="bg-gradient-to-br from-red-50/60 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-8 md:p-12 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="max-w-2xl space-y-5 text-center md:text-left relative z-10">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-black tracking-widest text-red-600 uppercase bg-red-100/80 px-4 py-1.5 rounded-full border border-red-200">
-            <Flame size={14} className="text-red-600" /> STAR TAEKWONDO CLUB
-          </span>
+      {/* 1. HERO SECTION DENGAN BACKGROUND FOTO + DARK OVERLAY (STYLE SIMPBTI) */}
+      <section className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 border-t-4 border-t-red-600 min-h-[480px] sm:min-h-[520px] flex items-center">
+        {/* Gambar Latar Belakang */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
+          style={{ backgroundImage: `url('${heroBgImage}')` }}
+        />
 
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 font-heading uppercase tracking-tight leading-tight">
-            Melatih Disiplin, <br />
-            <span className="text-red-600">Mengukir Prestasi</span>
-          </h1>
+        {/* Dark Overlay Gradient Agar Teks Sangat Jelas & Aesthetic */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/40 sm:to-slate-950/20" />
 
-          <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-lg">
-            Wadah pembentukan karakter, mental, dan fisik atlet Taekwondo berprestasi dari tingkat pemula hingga kejuaraan nasional.
-          </p>
+        {/* Konten Utama Hero Banner */}
+        <div className="relative z-10 w-full p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="max-w-xl space-y-5 text-center md:text-left">
+            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black tracking-widest text-white uppercase bg-red-600/90 px-4 py-1.5 rounded-full border border-red-400 shadow-md">
+              <Flame size={14} className="text-amber-300" /> STAR TAEKWONDO CLUB
+            </span>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 justify-center md:justify-start">
-            <Link
-              to="/register"
-              className="w-full sm:w-auto px-7 py-3.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-red-500/25 transition flex items-center justify-center gap-2 active:scale-95"
-            >
-              Daftar Sekarang <ArrowRight size={16} />
-            </Link>
-            <Link
-              to="/schedule"
-              className="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-black text-xs uppercase tracking-wider rounded-2xl transition shadow-xs flex items-center justify-center gap-2"
-            >
-              Lihat Jadwal Latihan
-            </Link>
+            <h1 className="text-3xl sm:text-5xl font-black text-white font-heading uppercase tracking-tight leading-tight drop-shadow-md">
+              Melatih Disiplin, <br />
+              <span className="text-red-500">Mengukir Prestasi</span>
+            </h1>
+
+            <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed drop-shadow-sm max-w-lg">
+              Wadah pembentukan karakter, mental, dan fisik atlet Taekwondo berprestasi dari tingkat pemula hingga kejuaraan nasional.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 justify-center md:justify-start">
+              <Link
+                to="/register"
+                className="w-full sm:w-auto px-7 py-3.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-red-600/40 transition-all flex items-center justify-center gap-2 active:scale-95"
+              >
+                Daftar Sekarang <ArrowRight size={16} />
+              </Link>
+              <Link
+                to="/schedule"
+                className="w-full sm:w-auto px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md font-black text-xs uppercase tracking-wider rounded-2xl transition shadow-xs flex items-center justify-center gap-2"
+              >
+                Lihat Jadwal Latihan
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="w-full md:w-80 bg-white border border-slate-200/80 p-6 rounded-3xl shadow-md space-y-4 relative z-10">
-          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-            <div className="w-10 h-10 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center text-red-600 font-black">
-              <Trophy size={20} />
+          {/* Widget Kaca (Glassmorphism) Kanan Hero */}
+          <div className="w-full md:w-80 bg-slate-900/60 backdrop-blur-xl border border-white/15 p-6 rounded-3xl shadow-2xl text-white space-y-4">
+            <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+              <div className="w-10 h-10 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 font-black flex-shrink-0">
+                <Trophy size={20} />
+              </div>
+              <div>
+                <div className="text-xs font-black uppercase text-white">Pusat Latihan Resmi</div>
+                <div className="text-[10px] text-red-400 font-bold">Pengcab Taekwondo Indonesia</div>
+              </div>
             </div>
-            <div>
-              <div className="text-xs font-black text-slate-900 uppercase">Pusat Latihan Resmi</div>
-              <div className="text-[10px] text-red-600 font-bold">Pengcab Taekwondo Indonesia</div>
-            </div>
-          </div>
 
-          <div className="space-y-2 text-xs font-semibold text-slate-600">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-emerald-600 flex-shrink-0" />
-              <span>Program Kyorugi & Poomsae</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-emerald-600 flex-shrink-0" />
-              <span>Pelatih Bersetifikat Kukkiwon</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-emerald-600 flex-shrink-0" />
-              <span>Sistem Rekam Jejak Digital</span>
+            <div className="space-y-2.5 text-xs font-semibold text-slate-200">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                <span>Program Kyorugi & Poomsae</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                <span>Pelatih Bersetifikat Kukkiwon</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                <span>Sistem Rekam Jejak Digital</span>
+              </div>
             </div>
           </div>
         </div>
@@ -95,7 +110,7 @@ export default function Home() {
           { label: 'DOJANG LATIHAN', count: '2 Area', icon: Zap, color: 'text-blue-600' },
           { label: 'PELATIH RESMI', count: '100%', icon: ShieldCheck, color: 'text-emerald-600' },
         ].map((stat, idx) => (
-          <div key={idx} className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs text-center space-y-1">
+          <div key={idx} className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs text-center space-y-1 hover:border-red-600/40 transition">
             <stat.icon size={22} className={`mx-auto ${stat.color} mb-1`} />
             <div className="text-2xl font-black text-slate-900 font-heading">{stat.count}</div>
             <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">{stat.label}</div>
@@ -103,7 +118,7 @@ export default function Home() {
         ))}
       </section>
 
-      {/* 3. SEKSI SABEUM / HEAD COACH (CENTER LAYOUT DENGAN DATA ASLI) */}
+      {/* 3. SEKSI SABEUM / HEAD COACH (CENTERED) */}
       <section className="space-y-6">
         <div className="text-center max-w-lg mx-auto">
           <span className="text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
@@ -117,7 +132,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Container Kartu Ditengah (Flex Center) */}
         <div className="flex flex-wrap justify-center items-center gap-6">
           {loadingCoaches ? (
             <div className="py-8 text-xs font-bold text-slate-400">Memuat data pelatih...</div>
@@ -153,7 +167,6 @@ export default function Home() {
               </div>
             ))
           ) : (
-            /* Kotak Pemberitahuan Jika Belum Ada Akun Yang Dijadikan Sabeum */
             <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-3xl p-6 text-center space-y-2">
               <div className="w-12 h-12 mx-auto rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
                 <User size={24} />
