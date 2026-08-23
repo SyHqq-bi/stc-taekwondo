@@ -19,11 +19,11 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 font-sans">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         
-        {/* Logo Brand */}
+        {/* Logo Brand Kiri Atas */}
         <Link to="/" className="flex items-center gap-3">
           <img src={logoImg} alt="STC Logo" className="h-10 w-auto" />
-          <span className="font-black text-slate-900 font-heading tracking-wider uppercase hidden sm:block text-base">
-            STAR <span className="text-red-600">TAEKWONDO</span>
+          <span className="font-black font-heading tracking-wider uppercase hidden sm:block text-base">
+            <span className="text-red-600">STAR TAEKWONDO</span> <span className="text-slate-900">CLUB</span>
           </span>
         </Link>
 
