@@ -153,7 +153,7 @@ export default function Home() {
       <section className="py-10 bg-white border-y border-slate-200/80 relative z-10">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl md:text-4xl font-black text-slate-900 font-heading">{settings?.stats_members || 10}+</div>
+            <div className="text-3xl md:text-4xl font-black text-slate-900 font-heading">{settings?.stats_members || 5}+</div>
             <div className="text-[11px] font-bold tracking-widest text-slate-500 uppercase mt-1">Anggota Aktif</div>
           </div>
           <div>
@@ -161,11 +161,11 @@ export default function Home() {
             <div className="text-[11px] font-bold tracking-widest text-slate-500 uppercase mt-1">Total Prestasi</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-black text-slate-900 font-heading">{settings?.stats_years || 5}+</div>
+            <div className="text-3xl md:text-4xl font-black text-slate-900 font-heading">{settings?.stats_years || 1}+</div>
             <div className="text-[11px] font-bold tracking-widest text-slate-500 uppercase mt-1">Tahun Berdiri</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-black text-amber-600 font-heading">{settings?.stats_training_days || 3} Hari</div>
+            <div className="text-3xl md:text-4xl font-black text-amber-600 font-heading">{settings?.stats_training_days || 2} Hari</div>
             <div className="text-[11px] font-bold tracking-widest text-slate-500 uppercase mt-1">Jadwal Latihan / Minggu</div>
           </div>
         </div>
