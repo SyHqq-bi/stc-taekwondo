@@ -11,10 +11,11 @@ export default function Home() {
   }, []);
 
   const fetchCoaches = async () => {
+    // Ambil khusus user dengan role 'COACH' (Sabeum)
     const { data } = await supabase
       .from('profiles')
       .select('id, full_name, avatar_url, role')
-      .in('role', ['COACH', 'ADMIN'])
+      .eq('role', 'COACH')
       .order('created_at', { ascending: true });
 
     setCoaches(data || []);
@@ -99,11 +100,11 @@ export default function Home() {
         ))}
       </section>
 
-      {/* 3. TIM PELATIH / SABEUM STC */}
+      {/* 3. TIM PELATIH / SABEUM HEAD COACH */}
       <section className="space-y-6">
         <div className="text-center max-w-lg mx-auto">
           <span className="text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-50 px-3 py-1 rounded-full border border-red-100">
-            INSTRUCTORS & COACHES
+            INSTRUCTORS & HEAD COACHES
           </span>
           <h2 className="text-2xl font-black text-slate-900 font-heading uppercase mt-2">
             Tim Pelatih STC
@@ -130,12 +131,12 @@ export default function Home() {
 
                 <div>
                   <span className="px-2.5 py-0.5 bg-red-100/80 text-red-700 text-[9px] font-black uppercase rounded-md tracking-wider border border-red-200">
-                    {c.role === 'COACH' ? 'SABEUM / PELATIH' : 'HEAD COACH'}
+                    SABEUM / HEAD COACH
                   </span>
                   <h3 className="text-base font-black text-slate-900 uppercase font-heading tracking-wide mt-1">
                     {c.full_name}
                   </h3>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Star Taekwondo Dojang</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Head Coach Star Taekwondo</p>
                 </div>
               </div>
             ))
@@ -145,9 +146,9 @@ export default function Home() {
                 <User size={24} />
               </div>
               <div>
-                <span className="px-2.5 py-0.5 bg-red-100 text-red-700 text-[9px] font-black uppercase rounded-md">SABEUM STC</span>
+                <span className="px-2.5 py-0.5 bg-red-100 text-red-700 text-[9px] font-black uppercase rounded-md">SABEUM / HEAD COACH</span>
                 <h3 className="text-base font-black text-slate-900 uppercase font-heading mt-1">Sabeum Nabil & Team</h3>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Pelatih Utama Star Taekwondo Club</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase">Head Coach Star Taekwondo Club</p>
               </div>
             </div>
           )}
