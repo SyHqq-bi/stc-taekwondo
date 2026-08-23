@@ -5,13 +5,15 @@ import { Flame, Trophy, Users, ShieldCheck, Award, ArrowRight, ChevronRight, Use
 
 export default function Home() {
   const [coaches, setCoaches] = useState([]);
+  const [loadingCoaches, setLoadingCoaches] = useState(true);
 
   useEffect(() => {
     fetchCoaches();
   }, []);
 
   const fetchCoaches = async () => {
-    // Ambil khusus user dengan role 'COACH' (Sabeum)
+    setLoadingCoaches(true);
+    // Hanya ambil user yang telah kamu set sebagai 'COACH' dari dashboard Admin
     const { data } = await supabase
       .from('profiles')
       .select('id, full_name, avatar_url, role')
@@ -19,6 +21,7 @@ export default function Home() {
       .order('created_at', { ascending: true });
 
     setCoaches(data || []);
+    setLoadingCoaches(false);
   };
 
   return (
@@ -100,56 +103,65 @@ export default function Home() {
         ))}
       </section>
 
-      {/* 3. TIM PELATIH / SABEUM HEAD COACH */}
+      {/* 3. SEKSI SABEUM / HEAD COACH (CENTER LAYOUT DENGAN DATA ASLI) */}
       <section className="space-y-6">
         <div className="text-center max-w-lg mx-auto">
-          <span className="text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-50 px-3 py-1 rounded-full border border-red-100">
-            INSTRUCTORS & HEAD COACHES
+          <span className="text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
+            HEAD COACH & INSTRUCTORS
           </span>
           <h2 className="text-2xl font-black text-slate-900 font-heading uppercase mt-2">
-            Tim Pelatih STC
+            Pelatih Utama STC
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Dibimbing langsung oleh Sabeum bersertifikasi resmi dan berpengalaman.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {coaches.length > 0 ? (
+        {/* Container Kartu Ditengah (Flex Center) */}
+        <div className="flex flex-wrap justify-center items-center gap-6">
+          {loadingCoaches ? (
+            <div className="py-8 text-xs font-bold text-slate-400">Memuat data pelatih...</div>
+          ) : coaches.length > 0 ? (
             coaches.map((c) => (
               <div
                 key={c.id}
-                className="bg-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-5 shadow-sm hover:shadow-md transition flex items-center gap-4"
+                className="w-full sm:w-80 bg-gradient-to-b from-red-50/40 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-6 shadow-sm hover:shadow-md transition text-center space-y-3"
               >
                 {c.avatar_url ? (
-                  <img src={c.avatar_url} alt="" className="w-14 h-14 rounded-2xl object-cover border-2 border-red-100 shadow-xs flex-shrink-0" />
+                  <img
+                    src={c.avatar_url}
+                    alt={c.full_name}
+                    className="w-20 h-20 mx-auto rounded-2xl object-cover border-2 border-red-100 shadow-sm"
+                  />
                 ) : (
-                  <div className="w-14 h-14 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center text-red-500 flex-shrink-0">
-                    <User size={24} />
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center text-red-500 shadow-sm">
+                    <User size={36} />
                   </div>
                 )}
 
                 <div>
-                  <span className="px-2.5 py-0.5 bg-red-100/80 text-red-700 text-[9px] font-black uppercase rounded-md tracking-wider border border-red-200">
+                  <span className="inline-block px-3 py-1 bg-red-100 text-red-700 text-[10px] font-black uppercase rounded-full tracking-wider border border-red-200">
                     SABEUM / HEAD COACH
                   </span>
-                  <h3 className="text-base font-black text-slate-900 uppercase font-heading tracking-wide mt-1">
-                    {c.full_name}
+                  <h3 className="text-lg font-black text-slate-900 uppercase font-heading tracking-wide mt-2">
+                    {c.full_name || 'Sabeum STC'}
                   </h3>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Head Coach Star Taekwondo</p>
+                  <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">
+                    Star Taekwondo Dojang
+                  </p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="sm:col-span-3 bg-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-6 shadow-sm flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center text-red-600 font-black">
+            /* Kotak Pemberitahuan Jika Belum Ada Akun Yang Dijadikan Sabeum */
+            <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-3xl p-6 text-center space-y-2">
+              <div className="w-12 h-12 mx-auto rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
                 <User size={24} />
               </div>
-              <div>
-                <span className="px-2.5 py-0.5 bg-red-100 text-red-700 text-[9px] font-black uppercase rounded-md">SABEUM / HEAD COACH</span>
-                <h3 className="text-base font-black text-slate-900 uppercase font-heading mt-1">Sabeum Nabil & Team</h3>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Head Coach Star Taekwondo Club</p>
-              </div>
+              <h3 className="text-xs font-black uppercase text-slate-800">Belum Ada Sabeum Ditunjuk</h3>
+              <p className="text-[11px] text-slate-500 font-medium">
+                Admin dapat memilih akun anggota dan mengubah aksesknya menjadi <strong>SABEUM (COACH)</strong> melalui halaman Admin Dashboard.
+              </p>
             </div>
           )}
         </div>
