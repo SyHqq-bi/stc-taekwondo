@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '../services/supabase';
-import { Plus, Trash2, Award } from 'lucide-react';
+import { Award, Trophy, User, Search, Calendar, Flame } from 'lucide-react';
 
-export default function AchievementsManager() {
+export default function Achievements() {
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-
-  const [title, setTitle] = useState('');
-  const [competition, setCompetition] = useState('');
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [medal, setMedal] = useState('GOLD');
-  const [athleteName, setAthleteName] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const [filterMedal, setFilterMedal] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchAchievements();
@@ -20,80 +14,168 @@ export default function AchievementsManager() {
 
   const fetchAchievements = async () => {
     setLoading(true);
-    const { data } = await supabase.from('achievements').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase
+      .from('achievements')
+      .select('*, profiles(full_name, avatar_url)')
+      .eq('status', 'APPROVED')
+      .order('year', { ascending: false });
+
     setAchievements(data || []);
     setLoading(false);
   };
 
-  const handleAdd = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { error } = await supabase.from('achievements').insert([{ title, competition, year: parseInt(year), medal, athlete_name: athleteName }]);
-    if (!error) {
-      setTitle(''); setCompetition(''); setAthleteName(''); setShowModal(false); fetchAchievements();
-    }
-    setSubmitting(false);
-  };
+  const filteredData = achievements.filter((item) => {
+    const studentName = item.profiles?.full_name || item.athlete_name || '';
+    const matchesSearch = studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          item.competition.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesMedal = filterMedal === 'ALL' || item.medal === filterMedal;
+    return matchesSearch && matchesMedal;
+  });
 
-  const handleDelete = async (id) => {
-    if (!confirm('Hapus prestasi ini?')) return;
-    await supabase.from('achievements').delete().eq('id', id);
-    fetchAchievements();
+  const getMedalBadge = (medal) => {
+    switch (medal) {
+      case 'GOLD':
+        return 'bg-amber-500 text-white border-amber-600 shadow-md shadow-amber-500/20 font-black';
+      case 'SILVER':
+        return 'bg-slate-700 text-white border-slate-800 shadow-md shadow-slate-700/20 font-black';
+      case 'BRONZE':
+        return 'bg-amber-800 text-white border-amber-900 shadow-md shadow-amber-800/20 font-black';
+      default:
+        return 'bg-slate-100 text-slate-700 border-slate-200 font-bold';
+    }
   };
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-black text-slate-900 uppercase font-heading">Kelola Prestasi</h2>
-          <p className="text-xs text-slate-500">Daftar medali dan kejuaraan klub.</p>
-        </div>
-        <button onClick={() => setShowModal(true)} className="px-4 py-2.5 bg-stc-red text-white font-extrabold text-xs rounded-xl flex items-center gap-2">
-          <Plus size={16} /> TAMBAH PRESTASI
-        </button>
-      </div>
+    <div className="min-h-screen bg-[#F8F9FA] pt-32 pb-20 px-6 font-sans">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="bg-white border border-slate-200/80 rounded-3xl p-8 mb-8 shadow-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-stc-red/5 rounded-full blur-2xl pointer-events-none" />
+          
+          <div>
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-stc-red uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-200/60 shadow-xs">
+              <Flame size={12} className="text-stc-red" /> HALL OF FAME STC
+            </span>
+            <h1 className="text-3xl font-black text-slate-900 font-heading uppercase mt-3 tracking-tight">
+              Rekam Jejak <span className="text-stc-red">Prestasi</span>
+            </h1>
+            <p className="text-xs text-slate-500 mt-1 font-medium">
+              Daftar medali dan pencapaian resmi atlet Star Taekwondo Club di kejuaraan daerah & nasional.
+            </p>
+          </div>
 
-      {showModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-md shadow-2xl">
-            <h3 className="text-base font-black text-slate-900 uppercase mb-4">Input Prestasi Baru</h3>
-            <form onSubmit={handleAdd} className="space-y-3">
-              <input type="text" required placeholder="Judul / Kategori" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full bg-slate-50 border p-2.5 text-xs rounded-xl" />
-              <input type="text" required placeholder="Nama Kejuaraan" value={competition} onChange={(e) => setCompetition(e.target.value)} className="w-full bg-slate-50 border p-2.5 text-xs rounded-xl" />
-              <div className="grid grid-cols-2 gap-2">
-                <select value={medal} onChange={(e) => setMedal(e.target.value)} className="bg-slate-50 border p-2.5 text-xs rounded-xl font-bold">
-                  <option value="GOLD">GOLD</option>
-                  <option value="SILVER">SILVER</option>
-                  <option value="BRONZE">BRONZE</option>
-                </select>
-                <input type="number" required value={year} onChange={(e) => setYear(e.target.value)} className="bg-slate-50 border p-2.5 text-xs rounded-xl" />
-              </div>
-              <input type="text" placeholder="Nama Atlet" value={athleteName} onChange={(e) => setAthleteName(e.target.value)} className="w-full bg-slate-50 border p-2.5 text-xs rounded-xl" />
-              <div className="flex gap-2 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2 bg-slate-100 rounded-xl text-xs font-bold">Batal</button>
-                <button type="submit" disabled={submitting} className="flex-1 py-2 bg-stc-red text-white rounded-xl text-xs font-bold">{submitting ? 'Simpan...' : 'Simpan'}</button>
-              </div>
-            </form>
+          <div className="flex items-center gap-3.5 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 px-6 rounded-2xl shadow-lg shadow-slate-900/10 border border-slate-800">
+            <Trophy className="text-amber-400" size={32} />
+            <div>
+              <div className="text-2xl font-black font-heading text-white">{achievements.length} Medali</div>
+              <div className="text-[10px] font-extrabold text-stc-red uppercase tracking-wider">Terverifikasi Admin</div>
+            </div>
           </div>
         </div>
-      )}
 
-      {loading ? <div className="py-6 text-center text-xs text-slate-400">Memuat...</div> : achievements.length > 0 ? (
-        <div className="space-y-3">
-          {achievements.map((item) => (
-            <div key={item.id} className="p-4 bg-slate-50 border rounded-2xl flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Award size={20} className="text-amber-500" />
-                <div>
-                  <h4 className="text-xs font-black">{item.title}</h4>
-                  <p className="text-[11px] text-slate-500">{item.competition} ({item.year}) • {item.athlete_name || '-'}</p>
-                </div>
-              </div>
-              <button onClick={() => handleDelete(item.id)} className="text-slate-400 hover:text-stc-red p-2"><Trash2 size={16} /></button>
-            </div>
-          ))}
+        {/* Filter & Search Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+          <div className="relative w-full sm:w-80">
+            <Search size={16} className="absolute left-3.5 top-3.5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Cari atlet atau nama kejuaraan..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white border border-slate-200/80 rounded-2xl py-2.5 pl-10 pr-4 text-xs font-bold text-slate-900 focus:outline-none focus:border-stc-red focus:ring-2 focus:ring-stc-red/10 shadow-sm transition"
+            />
+          </div>
+
+          {/* Filter Pills Dengan Warna Merah Bold Akurat */}
+          <div className="flex items-center gap-1.5 bg-white border border-slate-200/80 p-1.5 rounded-2xl shadow-sm w-full sm:w-auto overflow-x-auto">
+            {['ALL', 'GOLD', 'SILVER', 'BRONZE'].map((medal) => (
+              <button
+                key={medal}
+                onClick={() => setFilterMedal(medal)}
+                className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 ${
+                  filterMedal === medal
+                    ? 'bg-stc-red text-white shadow-md shadow-red-500/25 scale-105'
+                    : 'text-slate-600 hover:text-stc-red hover:bg-red-50/50'
+                }`}
+              >
+                {medal === 'ALL' ? 'Semua' : medal}
+              </button>
+            ))}
+          </div>
         </div>
-      ) : <div className="py-6 text-center text-xs text-slate-400">Belum ada data.</div>}
+
+        {/* List Kartu Prestasi Horizontal */}
+        {loading ? (
+          <div className="py-12 text-center text-xs font-bold text-slate-400">Memuat data prestasi...</div>
+        ) : filteredData.length === 0 ? (
+          <div className="py-12 text-center text-xs font-bold text-slate-400 bg-white border border-slate-200/80 rounded-3xl">
+            Belum ada prestasi yang cocok.
+          </div>
+        ) : (
+          <div className="space-y-3.5">
+            {filteredData.map((item) => {
+              const studentName = item.profiles?.full_name || item.athlete_name || 'ATLET STC';
+              const studentAvatar = item.profiles?.avatar_url;
+
+              return (
+                <div
+                  key={item.id}
+                  className="group bg-white border border-slate-200/80 hover:border-stc-red/40 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-lg hover:shadow-red-500/5 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden"
+                >
+                  {/* Aksentuasi Garis Merah di Kiri Kartu saat Hover */}
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-stc-red opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Foto Akun di Kiri & Nama Atlet Bold */}
+                  <div className="flex items-center gap-4 pl-1">
+                    {studentAvatar ? (
+                      <img
+                        src={studentAvatar}
+                        alt={studentName}
+                        className="w-14 h-14 rounded-2xl object-cover border-2 border-slate-100 group-hover:border-stc-red/30 shadow-sm flex-shrink-0 transition"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 flex-shrink-0 group-hover:border-stc-red/30 transition">
+                        <User size={24} />
+                      </div>
+                    )}
+
+                    <div>
+                      {/* Nama Atlet Extra Bold & Standout */}
+                      <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase font-heading tracking-wide">
+                        {studentName}
+                      </h3>
+                      <div className="text-xs font-extrabold text-stc-red mt-0.5 uppercase tracking-wider">
+                        {item.competition}
+                      </div>
+                      <div className="flex items-center gap-2 text-[11px] text-slate-500 font-semibold mt-1">
+                        <span>Kategori: {item.title || '-'}</span>
+                        <span className="text-slate-300">•</span>
+                        <span className="flex items-center gap-1 font-mono text-slate-400">
+                          <Calendar size={12} /> {item.year}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Badge Medali di Kanan */}
+                  <div className="self-end sm:self-center flex-shrink-0">
+                    <span
+                      className={`px-4 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2 border ${getMedalBadge(
+                        item.medal
+                      )}`}
+                    >
+                      <Award size={16} />
+                      MEDALI {item.medal}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
