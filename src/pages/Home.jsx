@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../services/supabase';
-import { Flame, Trophy, ShieldCheck, Award, ArrowRight, ChevronRight, User, CheckCircle2, Zap, Sparkles, MapPin, Navigation } from 'lucide-react';
+import { Flame, Trophy, ShieldCheck, Award, ArrowRight, ChevronRight, User, CheckCircle2, Zap, Sparkles, Navigation } from 'lucide-react';
 
 export default function Home() {
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(true);
   const [activeCategory, setActiveCategory] = useState('ALL');
 
-  // Hero Image Showcase
-  const heroShowcaseImg = "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1200&q=80";
+  // Hero Athlete Image (Clean Aesthetic Taekwondo Stance)
+  const heroAthleteImg = "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1000&q=80";
 
   useEffect(() => {
     fetchCoaches();
@@ -27,30 +27,23 @@ export default function Home() {
     setLoadingCoaches(false);
   };
 
+  // Hanya Kyorugi dan Poomsae
   const programs = [
     {
       id: 'kyorugi',
       tag: 'KYORUGI',
       title: 'Kategori Pertarungan (Sparring)',
-      desc: 'Spesialisasi teknik tendangan cepat, taktik bertarung, dan fisik kejuaraan tanding resmi.',
-      category: 'TANDING',
-      img: 'https://images.unsplash.com/photo-1517649763962-0c623266010b?auto=format&fit=crop&w=800&q=80'
+      desc: 'Spesialisasi teknik tendangan cepat, taktik bertarung, reaksi tanding, dan pembentukan fisik kejuaraan resmi.',
+      category: 'KYORUGI',
+      img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'poomsae',
       tag: 'POOMSAE',
       title: 'Kategori Jurus (Seni)',
-      desc: 'Penguasaan keindahan jurus, ketepatan posisi, keseimbangan, dan estetika tendangan.',
-      category: 'SENI',
+      desc: 'Penguasaan keindahan jurus, ketepatan posisi kuda-kuda, keseimbangan, serta estetika gerakan Taekwondo.',
+      category: 'POOMSAE',
       img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'reguler',
-      tag: 'PEMULA',
-      title: 'Kelas Reguler & Basic',
-      desc: 'Program pengenalan teknik dasar, pembentukan kedisiplinan, dan kenaikan tingkat sabuk.',
-      category: 'BASIC',
-      img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80'
     }
   ];
 
@@ -61,12 +54,12 @@ export default function Home() {
   return (
     <div className="min-h-screen pt-28 pb-20 px-4 sm:px-6 font-sans space-y-24 max-w-6xl mx-auto">
       
-      {/* 1. HERO SECTION (LAYOUT MINIMALIS ELEGAN ALA ULTIMATE UI) */}
+      {/* 1. HERO SECTION (FLOATING CLEAN SHOWCASE ALA UNIQUE CAR RENTAL) */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        {/* Teks Sisi Kiri */}
+        {/* Teks Kiri */}
         <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <span className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-4 py-1.5 rounded-full border border-red-100 shadow-xs">
-            <Flame size={13} className="text-red-600 fill-red-600" /> STAR TAEKWONDO CLUB
+          <span className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-4 py-1.5 rounded-full border border-red-100/80 shadow-xs">
+            <Flame size={13} className="text-red-600 fill-red-600 animate-pulse" /> STAR TAEKWONDO CLUB
           </span>
 
           <h1 className="text-4xl sm:text-6xl font-black text-slate-950 font-heading tracking-tight leading-[1.08]">
@@ -81,36 +74,38 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 justify-center lg:justify-start">
             <Link
               to="/register"
-              className="w-full sm:w-auto px-8 py-4 bg-slate-950 hover:bg-red-600 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-slate-950/10 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto px-8 py-4 bg-slate-950 hover:bg-red-600 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-slate-950/10 transition-all duration-500 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
             >
               Daftar Anggota <ArrowRight size={16} />
             </Link>
             <Link
               to="/schedule"
-              className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/80 font-black text-xs uppercase tracking-wider rounded-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-xs flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/80 font-black text-xs uppercase tracking-wider rounded-2xl transition-all duration-500 hover:-translate-y-1 shadow-xs flex items-center justify-center gap-2"
             >
               Jadwal Latihan
             </Link>
           </div>
         </div>
 
-        {/* Showcase Visual Sisi Kanan (Kartu Minimalis Foto + Badge Gold) */}
+        {/* Floating Showcase Kanan (Atlet Foto Clean + Floating Glass Badge) */}
         <div className="lg:col-span-5 relative">
-          <div className="relative rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-2xl group transition-all duration-500">
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/80 border border-slate-200/80 shadow-xl group transition-all duration-700 hover:shadow-2xl hover:-translate-y-1">
             <img
-              src={heroShowcaseImg}
+              src={heroAthleteImg}
               alt="STC Taekwondo Athlete"
-              className="w-full h-[380px] sm:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-[360px] sm:h-[400px] object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+            
+            {/* Soft Bottom Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
 
-            {/* Badge Terapung Emas / Medal Showcase */}
-            <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-md border border-white/60 p-4 rounded-2xl shadow-lg flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 flex-shrink-0">
+            {/* Glassmorphism Badge Below */}
+            <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md border border-white/60 p-4 rounded-2xl shadow-lg flex items-center gap-3.5 transition-all duration-500 group-hover:bg-white">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 flex-shrink-0">
                 <Trophy size={20} />
               </div>
               <div>
-                <div className="text-xs font-black text-slate-900 uppercase">Do-Jang Resmi Pengcab TI</div>
+                <div className="text-xs font-black text-slate-900 uppercase font-heading">Dojang Resmi Pengcab TI</div>
                 <div className="text-[10px] text-red-600 font-extrabold uppercase tracking-wider">Terverifikasi & Bersetifikat</div>
               </div>
             </div>
@@ -118,20 +113,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STRIP LOGO / FEDERASI SUPPORT */}
+      {/* STRIP TEXT FEDERASI */}
       <section className="pt-4 border-t border-slate-200/60">
-        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-          <span>PENGCAB TAEKWONDO</span>
+        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+          <span className="hover:text-red-600 transition-colors">PENGCAB TAEKWONDO</span>
           <span className="hidden sm:inline">•</span>
-          <span>KUKKIWON CERTIFIED</span>
+          <span className="hover:text-red-600 transition-colors">KUKKIWON CERTIFIED</span>
           <span className="hidden sm:inline">•</span>
-          <span>SISTEM DIGITAL REKAM JEJAK</span>
+          <span className="hover:text-red-600 transition-colors">SISTEM DIGITAL REKAM JEJAK</span>
           <span className="hidden sm:inline">•</span>
-          <span>STAR DOJANG BANTEN</span>
+          <span className="hover:text-red-600 transition-colors">STAR DOJANG BANTEN</span>
         </div>
       </section>
 
-      {/* 2. PROGRAM & KATEGORI LATIHAN (SHOWCASE DENGAN FILTER PILLS SEPERTI DI VIDEO) */}
+      {/* 2. PROGRAM PEMBINAAN (MURNI KYORUGI & POOMSAE DENGAN TAB KAPSUL CLEAN) */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
@@ -141,25 +136,24 @@ export default function Home() {
             Kategori Spesialisasi
           </h2>
           <p className="text-xs text-slate-500 font-medium">
-            Program latihan dirancang khusus untuk memenuhi bakat dan potensi setiap atlet.
+            Program latihan difokuskan pada dua kategori utama kejuaraan resmi Taekwondo.
           </p>
         </div>
 
-        {/* Filter Pills Kapsul ala Minimalist App UI */}
+        {/* Filter Pills Kapsul (Tanpa Reguler Pemula) */}
         <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
           {[
             { id: 'ALL', label: 'Semua Program' },
-            { id: 'TANDING', label: 'Kyorugi (Tanding)' },
-            { id: 'SENI', label: 'Poomsae (Seni)' },
-            { id: 'BASIC', label: 'Reguler Pemula' },
+            { id: 'KYORUGI', label: 'Kyorugi (Tanding)' },
+            { id: 'POOMSAE', label: 'Poomsae (Seni)' },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveCategory(tab.id)}
-              className={`px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 ${
+              className={`px-6 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-500 ease-out ${
                 activeCategory === tab.id
-                  ? 'bg-slate-950 text-white shadow-md scale-105'
-                  : 'bg-white text-slate-600 border border-slate-200/80 hover:text-slate-950 hover:bg-slate-50'
+                  ? 'bg-slate-950 text-white shadow-lg shadow-slate-950/20 scale-105'
+                  : 'bg-white text-slate-600 border border-slate-200/80 hover:text-slate-950 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
               {tab.label}
@@ -167,19 +161,19 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Grid Kartu Program Minimalis */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Grid Kartu Program (Kyorugi & Poomsae) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {filteredPrograms.map((prog) => (
             <div
               key={prog.id}
-              className="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between"
+              className="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out flex flex-col justify-between"
             >
               <div>
-                <div className="h-48 overflow-hidden relative">
+                <div className="h-56 overflow-hidden relative bg-slate-100">
                   <img
                     src={prog.img}
                     alt={prog.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <span className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-white text-[9px] font-black uppercase px-3 py-1 rounded-full tracking-wider">
                     {prog.tag}
@@ -187,7 +181,7 @@ export default function Home() {
                 </div>
 
                 <div className="p-6 space-y-2">
-                  <h3 className="text-base font-black text-slate-950 font-heading uppercase">{prog.title}</h3>
+                  <h3 className="text-lg font-black text-slate-950 font-heading uppercase">{prog.title}</h3>
                   <p className="text-xs text-slate-500 font-medium leading-relaxed">{prog.desc}</p>
                 </div>
               </div>
@@ -195,7 +189,7 @@ export default function Home() {
               <div className="px-6 pb-6 pt-2">
                 <Link
                   to="/schedule"
-                  className="inline-flex items-center gap-2 text-xs font-black text-red-600 hover:text-red-700 uppercase tracking-wider group-hover:translate-x-1 transition-transform"
+                  className="inline-flex items-center gap-2 text-xs font-black text-red-600 hover:text-red-700 uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300"
                 >
                   Lihat Sesi Latihan <ChevronRight size={14} />
                 </Link>
@@ -205,7 +199,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. KEY FEATURES / KEUNGGULAN CLUB (4 KARTU SEPERTI 00:06 DI VIDEO) */}
+      {/* 3. KEY ADVANTAGES (4 KARTU CLEAN MINIMALIS) */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
@@ -214,7 +208,7 @@ export default function Home() {
           <h2 className="text-3xl font-black text-slate-950 font-heading uppercase tracking-tight">
             Mengapa Memilih STC?
           </h2>
-          <p className="text-xs text-slate-500 font-medium"> Standar pelatihan modern untuk membentuk atlet tangguh & berprestasi. </p>
+          <p className="text-xs text-slate-500 font-medium">Standar pelatihan modern untuk membentuk atlet tangguh & berprestasi.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -246,7 +240,7 @@ export default function Home() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 space-y-4"
+              className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 ease-out space-y-4"
             >
               <div className={`w-12 h-12 rounded-2xl ${item.iconBg} border flex items-center justify-center font-black`}>
                 <item.icon size={22} />
@@ -260,7 +254,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. HEAD COACH SPOTLIGHT (LAYOUT DITENGAH / CENTER) */}
+      {/* 4. HEAD COACH SPOTLIGHT (CENTERED) */}
       <section className="space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-[10px] font-black tracking-[0.25em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
@@ -281,13 +275,13 @@ export default function Home() {
             coaches.map((c) => (
               <div
                 key={c.id}
-                className="w-full sm:w-80 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 text-center space-y-3"
+                className="w-full sm:w-80 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 ease-out text-center space-y-3"
               >
                 {c.avatar_url ? (
                   <img
                     src={c.avatar_url}
                     alt={c.full_name}
-                    className="w-20 h-20 mx-auto rounded-2xl object-cover border-2 border-red-100 shadow-sm"
+                    className="w-20 h-20 mx-auto rounded-2xl object-cover border-2 border-red-100 shadow-sm transition-transform duration-500 hover:scale-105"
                   />
                 ) : (
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center text-red-500 shadow-sm">
@@ -361,7 +355,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. DARK CTA BANNER (SEPERTI WADAH GELAP DI 00:09 PADA VIDEO) */}
+      {/* 6. DARK CTA BANNER */}
       <section className="bg-slate-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-slate-800 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-8 relative overflow-hidden">
         <div className="space-y-3 relative z-10 max-w-lg">
           <span className="text-[10px] font-black text-amber-400 tracking-[0.25em] uppercase bg-amber-500/10 px-3.5 py-1 rounded-full border border-amber-500/20">
