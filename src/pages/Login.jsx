@@ -29,21 +29,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] pt-32 pb-20 px-6 font-sans flex items-center justify-center">
+    <div className="min-h-screen pt-32 pb-20 px-6 font-sans flex items-center justify-center">
       <div className="w-full max-w-md">
         
-        <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xl shadow-slate-200/50 relative overflow-hidden">
-          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-stc-red/10 rounded-full blur-2xl pointer-events-none" />
-
-          {/* Header Card */}
+        <div className="bg-gradient-to-b from-red-50/40 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-8 shadow-xl shadow-slate-200/50">
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-stc-red uppercase bg-red-50 px-3 py-1 rounded-full border border-red-100">
-              <Flame size={12} className="text-stc-red" /> PORTAL MASUK
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-100/80 px-3.5 py-1 rounded-full border border-red-200">
+              <Flame size={12} className="text-red-600" /> PORTAL MASUK
             </span>
             <h1 className="text-2xl font-black text-slate-900 font-heading uppercase mt-3">
-              Masuk Akun <span className="text-stc-red">STC</span>
+              Masuk Akun <span className="text-red-600">STC</span>
             </h1>
-            <p className="text-xs text-slate-500 mt-1">Masukkan email dan password terdaftar kamu.</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Masukkan email dan password terdaftar kamu.</p>
           </div>
 
           {errorMsg && (
@@ -66,7 +63,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="contoh@gmail.com"
-                  className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-slate-900 focus:outline-none focus:border-stc-red focus:ring-2 focus:ring-stc-red/10"
+                  className="w-full bg-white border border-slate-200/80 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-slate-900 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/10 shadow-xs"
                 />
               </div>
             </div>
@@ -83,7 +80,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-slate-900 focus:outline-none focus:border-stc-red focus:ring-2 focus:ring-stc-red/10"
+                  className="w-full bg-white border border-slate-200/80 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-slate-900 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/10 shadow-xs"
                 />
               </div>
             </div>
@@ -91,7 +88,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-stc-red hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-red-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 mt-2"
+              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-red-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 mt-2"
             >
               <LogIn size={16} />
               {loading ? 'Memproses...' : 'Masuk Ke Akun'}
@@ -100,7 +97,7 @@ export default function Login() {
 
           <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-500 font-medium">
             Belum punya akun?{' '}
-            <Link to="/register" className="font-extrabold text-stc-red hover:underline uppercase tracking-wider">
+            <Link to="/register" className="font-extrabold text-red-600 hover:underline uppercase tracking-wider">
               Daftar Sekarang
             </Link>
           </div>

@@ -1,113 +1,114 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../services/supabase';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Clock, MapPin, User, Flame, Sparkles } from 'lucide-react';
 
 export default function Schedule() {
   const [schedules, setSchedules] = useState([]);
-  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
+    fetchSchedules();
   }, []);
 
-  const fetchData = async () => {
+  const fetchSchedules = async () => {
     setLoading(true);
-    const { data: schedData } = await supabase.from('training_schedule').select('*');
-    const { data: eventData } = await supabase.from('events').select('*').order('event_date', { ascending: true });
-
-    setSchedules(schedData || []);
-    setEvents(eventData || []);
+    const { data } = await supabase.from('schedules').select('*').order('created_at', { ascending: true });
+    setSchedules(data || []);
     setLoading(false);
   };
 
+  const defaultSchedules = [
+    {
+      id: 1,
+      day: 'SABTU',
+      time: '15:30 - 17:30 WIB',
+      location: 'Dojang Utama STC (Gedung Olahraga)',
+      coach: 'Sabeum Nabil & Team',
+      category: 'Reguler (Kyorugi & Poomsae)',
+    },
+    {
+      id: 2,
+      day: 'MINGGU',
+      time: '08:00 - 11:00 WIB',
+      location: 'Outdoor Area / Lapangan STC',
+      coach: 'Sabeum Head Coach',
+      category: 'TC Kejuaraan & Fisik Khusus',
+    }
+  ];
+
+  const displayData = schedules.length > 0 ? schedules : defaultSchedules;
+
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-slate-900 pt-32 pb-24 px-6 font-sans">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <div className="min-h-screen pt-32 pb-20 px-6 font-sans">
+      <div className="max-w-5xl mx-auto space-y-8">
         
-        {/* HEADER */}
-        <div className="text-center max-w-3xl mx-auto">
-          <span className="text-[11px] font-extrabold text-stc-red tracking-widest uppercase bg-red-50 px-3 py-1 rounded-full border border-red-100">
-            AGENDA & JADWAL
-          </span>
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 mt-3 uppercase font-heading">
-            JADWAL LATIHAN & EVENT
-          </h1>
-          <p className="text-slate-600 text-sm mt-3">
-            Informasi lengkap hari latihan reguler Star Taekwondo Club dan agenda kejuaraan terdekat.
-          </p>
-        </div>
-
-        {/* JADWAL LATIHAN MINGGUAN */}
-        <div>
-          <div className="flex items-center gap-2 mb-6">
-            <Clock className="text-stc-red" size={20} />
-            <h2 className="text-xl font-black text-slate-900 font-heading uppercase">Jadwal Latihan Rutin</h2>
+        {/* Header Section */}
+        <div className="bg-gradient-to-br from-red-50/50 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-8 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest text-red-600 uppercase bg-red-100/80 px-3.5 py-1 rounded-full border border-red-200">
+              <Flame size={12} className="text-red-600" /> AGENDA LATIHAN RUTIN
+            </span>
+            <h1 className="text-3xl font-black text-slate-900 font-heading uppercase mt-3 tracking-tight">
+              Jadwal <span className="text-red-600">Latihan STC</span>
+            </h1>
+            <p className="text-xs text-slate-500 mt-1 font-medium max-w-xl">
+              Disiplin dan konsistensi adalah kunci prestasi. Pastikan hadir tepat waktu dengan memakai Do-bok lengkap.
+            </p>
           </div>
 
-          {loading ? (
-            <div className="text-center py-10 text-xs text-slate-400">Memuat jadwal...</div>
-          ) : schedules.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {schedules.map((item) => (
-                <div key={item.id} className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
-                  <span className="px-3 py-1 bg-red-50 text-stc-red text-[11px] font-black rounded-lg uppercase">
-                    {item.day_name}
-                  </span>
-                  <h3 className="text-lg font-black text-slate-900 mt-4 mb-2">{item.category}</h3>
-                  <div className="space-y-1.5 text-xs text-slate-600">
-                    <p className="flex items-center gap-2 font-medium">
-                      <Clock size={14} className="text-slate-400" /> {item.time_range}
-                    </p>
-                    <p className="flex items-center gap-2 font-medium">
-                      <MapPin size={14} className="text-slate-400" /> {item.location}
-                    </p>
+          <div className="flex items-center gap-2.5 bg-white border-2 border-red-100 px-5 py-3.5 rounded-2xl shadow-sm">
+            <Sparkles size={22} className="text-amber-500" />
+            <div>
+              <div className="text-xs font-black uppercase tracking-wider text-slate-900">2 Sesi / Minggu</div>
+              <div className="text-[10px] text-red-600 font-bold">Terjadwal Sistem</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Grid Kartu Jadwal */}
+        {loading ? (
+          <div className="py-12 text-center text-xs font-bold text-slate-400">Memuat agenda latihan...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {displayData.map((item) => (
+              <div
+                key={item.id}
+                className="bg-gradient-to-b from-red-50/30 via-white to-white border border-slate-200/80 border-t-4 border-t-red-600 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <span className="px-4 py-1.5 bg-red-600 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md shadow-red-500/20">
+                      HARI {item.day || item.hari}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-red-50 px-3 py-1 rounded-xl border border-red-100">
+                      <Clock size={13} className="text-red-600" /> {item.time || item.jam}
+                    </span>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 bg-white border border-slate-200/80 rounded-2xl text-center text-xs text-slate-500">
-              Jadwal latihan rutin belum diatur oleh pengurus.
-            </div>
-          )}
-        </div>
 
-        {/* AGENDA KEJUARAAN */}
-        <div>
-          <div className="flex items-center gap-2 mb-6">
-            <Calendar className="text-stc-red" size={20} />
-            <h2 className="text-xl font-black text-slate-900 font-heading uppercase">Agenda Kejuaraan & Event</h2>
-          </div>
+                  <h3 className="text-lg font-black text-slate-900 uppercase font-heading tracking-wide mt-2">
+                    {item.category || item.kategori || 'Sesi Latihan STC'}
+                  </h3>
 
-          {events.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {events.map((ev) => (
-                <div key={ev.id} className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-black rounded-lg uppercase">
-                        {ev.category || 'EVENT'}
-                      </span>
-                      <span className="text-xs font-bold text-slate-400">
-                        {new Date(ev.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </span>
+                  <div className="space-y-2.5 mt-4 pt-4 border-t border-slate-100 text-xs font-semibold text-slate-600">
+                    <div className="flex items-center gap-2.5">
+                      <MapPin size={16} className="text-red-600 flex-shrink-0" />
+                      <span>{item.location || item.lokasi}</span>
                     </div>
-                    <h3 className="text-xl font-black text-slate-900 mb-2">{ev.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-4">{ev.description || 'Tidak ada deskripsi.'}</p>
-                  </div>
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
-                    <span className="flex items-center gap-1.5"><MapPin size={14} className="text-stc-red" /> {ev.location}</span>
+                    <div className="flex items-center gap-2.5">
+                      <User size={16} className="text-amber-500 flex-shrink-0" />
+                      <span>Pelatih: <strong className="text-slate-900">{item.coach || item.pelatih}</strong></span>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 bg-white border border-slate-200/80 rounded-2xl text-center text-xs text-slate-500">
-              Belum ada agenda kejuaraan mendatang.
-            </div>
-          )}
-        </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  <span>STC Official Dojang</span>
+                  <span className="text-red-600 font-bold">Wajib Hadir Tepat Waktu</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </div>
