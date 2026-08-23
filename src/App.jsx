@@ -11,6 +11,7 @@ import Schedule from './pages/Schedule';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MemberDashboard from './member/MemberDashboard';
+import CompleteProfile from './member/CompleteProfile'; // <-- Tambahan import halaman profil
 import AdminDashboard from './admin/Dashboard';
 
 export default function App() {
@@ -41,6 +42,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <MemberDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/complete-profile"
+                element={
+                  <ProtectedRoute>
+                    <CompleteProfile />
                   </ProtectedRoute>
                 }
               />
