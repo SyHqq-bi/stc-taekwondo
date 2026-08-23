@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { User, LogOut, LayoutDashboard } from 'lucide-react';
+import logoImg from '../assets/logo.png'; // <-- Import logo langsung dari folder assets
 
 export default function Navbar() {
   const { user, profile, logout } = useAuth();
@@ -18,7 +19,7 @@ export default function Navbar() {
         
         {/* Logo Brand */}
         <Link to="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="STC Logo" className="h-10 w-auto" />
+          <img src={logoImg} alt="STC Logo" className="h-10 w-auto" />
           <span className="font-black text-slate-900 font-heading tracking-wider uppercase hidden sm:block text-base">
             STAR <span className="text-stc-red">TAEKWONDO</span>
           </span>
@@ -48,7 +49,6 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2 ml-2">
-              {/* Shortcut Khusus Admin */}
               {profile?.role === 'ADMIN' && (
                 <Link
                   to="/admin"
@@ -59,7 +59,6 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* Tombol Nama/Foto Profil Kanan Atas -> Langsung ke Complete Profile */}
               <Link
                 to="/complete-profile"
                 className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl border border-slate-200/80 transition"
@@ -79,7 +78,6 @@ export default function Navbar() {
                 </span>
               </Link>
 
-              {/* Tombol Logout */}
               <button
                 onClick={handleLogout}
                 className="p-2 text-slate-400 hover:text-stc-red transition rounded-xl"
