@@ -14,41 +14,72 @@ export const AuthProvider = ({ children }) => {
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
-      if (!error && data) setProfile(data);
+        .maybeSingle();
+
+      if (!error && data) {
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
     } catch (err) {
       console.error('Error fetching profile:', err);
+      setProfile(null);
     }
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) fetchProfile(session.user.id);
-      setLoading(false);
-    });
+    let mounted = true;
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        setProfile(null);
+    const initAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (mounted) {
+          setUser(session?.user ?? null);
+          if (session?.user) {
+            await fetchProfile(session.user.id);
+          }
+        }
+      } catch (err) {
+        console.error('Auth initialization error:', err);
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
+    };
+
+    initAuth();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (mounted) {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          await fetchProfile(session.user.id);
+        } else {
+          setProfile(null);
+        }
+        setLoading(false);
+      }
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      listener?.subscription?.unsubscribe();
+    };
   }, []);
 
   const login = (email, password) => supabase.auth.signInWithPassword({ email, password });
+  
   const register = (email, password, fullName) => 
     supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } }
     });
-  const logout = () => supabase.auth.signOut();
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setProfile(null);
+  };
 
   return (
     <AuthContext.Provider value={{ user, profile, loading, login, register, logout, fetchProfile }}>

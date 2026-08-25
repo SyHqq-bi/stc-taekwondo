@@ -2,22 +2,24 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export const ProtectedRoute = ({ children, requiredRole = null }) => {
+export default function ProtectedRoute({ children, allowedRoles }) {
   const { user, profile, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-stc-navy flex items-center justify-center text-stc-offwhite">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-stc-red"></div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-xs font-bold text-slate-400 font-sans">
+        Memverifikasi Akses...
       </div>
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-  if (requiredRole === 'ADMIN' && profile?.role !== 'ADMIN') {
-    return <Navigate to="/member" replace />;
+  if (allowedRoles && !allowedRoles.includes(profile?.role)) {
+    return <Navigate to="/" replace />;
   }
 
   return children;
-};
+}
