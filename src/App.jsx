@@ -8,8 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import MemberDashboard from './pages/MemberDashboard';
-import AdminDashboard from './pages/AdminDashboard';
+import MemberDashboard from './member/MemberDashboard';
+import AdminDashboard from './admin/Dashboard';
 
 export default function App() {
   return (
