@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 import { motion } from 'framer-motion';
-import { Mail, Lock, LogIn, Flame, AlertCircle } from 'lucide-react';
+import { Lock, Save, Flame, AlertCircle } from 'lucide-react';
 
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function ResetPassword() {
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleUpdatePassword = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg('');
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (newPassword !== confirmPassword) {
+      setErrorMsg('Konfirmasi kata sandi tidak cocok.');
+      setLoading(false);
+      return;
+    }
+
+    // Perbarui password user di Supabase
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
 
     if (error) {
-      setErrorMsg('Email atau password salah. Silakan periksa kembali.');
+      setErrorMsg(error.message);
     } else {
-      navigate('/member');
+      alert('Password berhasil diperbarui! Silakan login dengan password barumu.');
+      navigate('/login');
     }
     setLoading(false);
   };
@@ -37,12 +47,12 @@ export default function Login() {
         <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xl">
           <div className="text-center mb-8">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black tracking-[0.2em] text-red-600 uppercase bg-red-50 px-3.5 py-1 rounded-full border border-red-100">
-              <Flame size={12} className="text-red-600 fill-red-600 animate-pulse" /> PORTAL MASUK
+              <Flame size={12} className="text-red-600 fill-red-600 animate-pulse" /> PERBARUI KATA SANDI
             </span>
             <h1 className="text-2xl font-black text-slate-950 font-heading uppercase mt-3 tracking-tight">
-              Masuk Akun <span className="text-red-600">STC</span>
+              Buat <span className="text-red-600">Kata Sandi Baru</span>
             </h1>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Masukkan email dan password terdaftar kamu.</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Masukkan kata sandi baru untuk akun kamu.</p>
           </div>
 
           {errorMsg && (
@@ -52,44 +62,38 @@ export default function Login() {
             </motion.div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleUpdatePassword} className="space-y-5">
             <div>
               <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
-                Email
+                Kata Sandi Baru
               </label>
               <div className="relative">
-                <Mail size={16} className="absolute left-4 top-3.5 text-slate-400" />
+                <Lock size={16} className="absolute left-4 top-3.5 text-slate-400" />
                 <input
-                  type="email"
+                  type="password"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="contoh@gmail.com"
+                  minLength={6}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Minimal 6 karakter"
                   className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3 pl-11 pr-4 text-xs font-bold text-slate-950 focus:bg-white focus:outline-none focus:border-red-600 transition"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                  Kata Sandi
-                </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-[11px] font-extrabold text-red-600 hover:underline uppercase tracking-wider"
-                >
-                  Lupa Kata Sandi?
-                </Link>
-              </div>
+              <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
+                Konfirmasi Kata Sandi Baru
+              </label>
               <div className="relative">
                 <Lock size={16} className="absolute left-4 top-3.5 text-slate-400" />
                 <input
                   type="password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  minLength={6}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Ulangi kata sandi baru"
                   className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3 pl-11 pr-4 text-xs font-bold text-slate-950 focus:bg-white focus:outline-none focus:border-red-600 transition"
                 />
               </div>
@@ -100,19 +104,12 @@ export default function Login() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-slate-950 hover:bg-red-600 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-slate-950/10 transition-colors duration-300 flex items-center justify-center gap-2 mt-2"
+              className="w-full py-3.5 bg-slate-950 hover:bg-red-600 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-slate-950/10 transition-colors duration-300 flex items-center justify-center gap-2"
             >
-              <LogIn size={16} />
-              {loading ? 'Memproses...' : 'Masuk Ke Akun'}
+              <Save size={16} />
+              {loading ? 'Menyimpan...' : 'Simpan Kata Sandi Baru'}
             </motion.button>
           </form>
-
-          <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-500 font-medium">
-            Belum punya akun?{' '}
-            <Link to="/register" className="font-extrabold text-red-600 hover:underline uppercase tracking-wider">
-              Daftar Sekarang
-            </Link>
-          </div>
         </div>
       </motion.div>
     </div>
